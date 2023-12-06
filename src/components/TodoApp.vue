@@ -20,7 +20,7 @@
                 <input id="filter-text" type="text" v-model="filterText" class="filter-text" placeholder="filter by text" />
             </div>
             <TodoList :todos="filteredTodos" @deleteTodo="deleteTodo" @editTodo="editTodo"
-                            @toggleTodoStatus="toggleTodoStatus" />
+                @toggleTodoStatus="toggleTodoStatus" />
         </div>
 
         <button v-if="todos.length > 0" @click="clearAllTodos" class="clear-button">
@@ -67,22 +67,41 @@ export default {
                 text: newTodo.trim(),
                 done: false,
             });
+            this.saveTodosToLocalStorage();
         },
         deleteTodo(index) {
             this.todos.splice(index, 1);
+            this.saveTodosToLocalStorage();
         },
         editTodo({ index, newText }) {
             this.todos[index].text = newText;
+            this.saveTodosToLocalStorage();
         },
         toggleTodoStatus(index) {
             this.todos[index].done = !this.todos[index].done;
+            this.saveTodosToLocalStorage();
         },
         clearAllTodos() {
             this.todos = [];
+            this.saveTodosToLocalStorage();
         },
         clearCompletedTodos() {
             this.todos = this.todos.filter((todo) => !todo.done);
+            this.saveTodosToLocalStorage();
         },
+        saveTodosToLocalStorage() {
+            localStorage.setItem('todos', JSON.stringify(this.todos));
+        },
+        loadTodosFromLocalStorage() {
+            const storedTodos = localStorage.getItem('todos');
+            if (storedTodos) {
+                this.todos = JSON.parse(storedTodos);
+            }
+        },
+    },
+    mounted() {
+        // Load todos from localStorage when the component is mounted
+        this.loadTodosFromLocalStorage();
     },
 };
 </script>
