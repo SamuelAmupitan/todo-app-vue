@@ -5,7 +5,7 @@
         <TodoForm @addTodo="addTodo" />
 
         <div class="add-todo-container">
-            <h2 v-if="todos.length < 1" class="task-header">No task yet</h2>
+            <p v-if="todos.length < 1" class="task-header">No task yet</p>
             <div v-if="todos.length > 0" class="filter-container">
                 <label for="filter-status">Filter by status:</label>
                 <select id="filter-status" v-model="filterStatus" class="filter-select">
